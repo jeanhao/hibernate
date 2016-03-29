@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+                        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+                       	http://www.springframework.org/schema/context
+						http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
+	<bean id="dataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver">
+		</property>
+		<property name="url" value="jdbc:mysql://localhost:3306/hibernate" />
+		<property name="username" value="root"></property>
+		<property name="password" value="root"></property>
+	</bean>
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		<property name="dataSource">
+			<ref bean="dataSource" />
+		</property>
+		<property name="hibernateProperties">
+			<props>
+				<!-- MySQL的方言 -->
+				<prop key="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</prop>
+				<prop key="javax.persistence.validation.mode">none</prop>
+				<!-- 必要时在数据库新建所有表格 -->
+				<prop key="hibernate.hbm2ddl.auto">update</prop>
+				<prop key="hibernate.show_sql">true</prop>
+				<!-- 配置current session的上下文环境，方便我们调用sessionFactory获取当前线程统一个session对象 -->
+				<prop key="current_session_context_class">thread</prop>
+				<!-- <prop key="hibernate.format_sql">true</prop> -->
+			</props>
+		</property>
+		<property name="packagesToScan" value="com.zeng1.model" /><!-- 
+			配置需要扫描的包路径，在该包下，所有的类注解配置都会被扫描 -->
+	</bean>
+</beans>
